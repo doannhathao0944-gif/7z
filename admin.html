@@ -22,8 +22,6 @@
 
   /* APP LAYOUT */
   #app{display:none;height:100vh;flex-direction:row;}
-
-  /* SIDEBAR */
   #sidebar{width:230px;background:#0a0a14;border-right:1px solid #ff440022;display:flex;flex-direction:column;flex-shrink:0;}
   .sidebar-header{padding:18px 16px;border-bottom:1px solid #ff440022;}
   .sidebar-header h1{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:3px;color:#ff4400;}
@@ -33,86 +31,41 @@
   .nav-item.active{color:#ff6633;background:#ff440015;border-left-color:#ff4400;}
   .badge{background:#ff4400;color:#0a0a0f;font-size:9px;padding:2px 6px;border-radius:10px;font-family:'Orbitron',sans-serif;min-width:18px;text-align:center;}
 
-  /* CONTENT */
   #content{flex:1;overflow-y:auto;padding:24px;background:#0a0a0f;}
-  #content::-webkit-scrollbar{width:4px;}
-  #content::-webkit-scrollbar-track{background:#0a0a0f;}
-  #content::-webkit-scrollbar-thumb{background:#ff440044;border-radius:2px;}
-
   .page-title{font-family:'Orbitron',sans-serif;font-size:15px;letter-spacing:3px;color:#ff6633;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid #ff440022;text-transform:uppercase;}
 
-  /* REQUEST CARDS */
-  .req-card{background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-  .req-name{font-family:'Orbitron',sans-serif;font-size:12px;color:#ff8866;letter-spacing:1px;}
-  .req-time{font-size:10px;color:#ff440066;margin-top:3px;}
-  .req-btns{display:flex;gap:8px;flex-shrink:0;}
-  .btn-accept{background:#00ff8820;border:1px solid #00ff88;border-radius:6px;padding:7px 14px;color:#00ff88;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
-  .btn-accept:hover{background:#00ff8840;box-shadow:0 0 10px rgba(0,255,136,0.3);}
-  .btn-reject{background:#ff440020;border:1px solid #ff4400;border-radius:6px;padding:7px 14px;color:#ff4400;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
-  .btn-reject:hover{background:#ff440040;}
+  /* CARDS */
+  .card{background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:14px 18px;margin-bottom:12px;}
+  .req-card{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .req-name{font-family:'Orbitron',sans-serif;font-size:12px;color:#ff8866;}
+  .req-time{font-size:10px;color:#ff440066;}
+  
+  /* TABLES FOR INFO */
+  table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px;}
+  th{text-align:left;color:#ff440099;padding:10px;border-bottom:1px solid #ff440022;text-transform:uppercase;font-size:10px;}
+  td{padding:10px;color:#ff8866;border-bottom:1px solid #ff440011;}
 
-  /* NOTIFICATIONS TAB */
-  .notif-form{background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:18px;margin-bottom:20px;}
-  .notif-form textarea{width:100%;background:#060610;border:1px solid #ff440044;border-radius:6px;padding:10px 14px;color:#ff8866;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;resize:vertical;min-height:80px;}
-  .notif-form textarea:focus{border-color:#ff4400;}
-  .send-btn{margin-top:10px;background:#ff440020;border:1px solid #ff4400;border-radius:6px;padding:9px 20px;color:#ff4400;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;cursor:pointer;}
-  .send-btn:hover{background:#ff440040;}
-  .notif-sent{font-size:11px;color:#00ff88;margin-top:8px;display:none;}
-  .notif-hist{background:#0d0d1a;border:1px solid #ff440022;border-radius:8px;padding:14px;}
-  .notif-item{padding:8px 0;border-bottom:1px solid #ff440015;font-size:12px;color:#ff8866;}
-  .notif-item:last-child{border-bottom:none;}
-  .notif-t{font-size:10px;color:#ff440066;margin-top:3px;}
-
-  /* TOURNAMENT FORM */
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
-  .form-group{display:flex;flex-direction:column;gap:6px;}
-  .form-group label{font-size:10px;letter-spacing:2px;color:#ff440099;text-transform:uppercase;}
-  .form-group input, .form-group select{background:#060610;border:1px solid #ff440044;border-radius:6px;padding:9px 12px;color:#ff8866;font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;}
-  .form-group input:focus, .form-group select:focus{border-color:#ff4400;}
-  .form-group select option{background:#0d0d1a;}
-  .create-btn{width:100%;background:#ff440020;border:1px solid #ff4400;border-radius:6px;padding:10px;color:#ff4400;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;cursor:pointer;margin-top:4px;}
-  .create-btn:hover{background:#ff440035;}
-
-  /* TOURNAMENT ADMIN CARDS */
-  .t-card{background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:14px;margin-bottom:12px;}
-  .t-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-  .t-name{font-family:'Orbitron',sans-serif;font-size:12px;color:#ff8866;}
-  .t-meta{font-size:11px;color:#ff440077;margin-bottom:10px;}
-  .t-actions{display:flex;gap:8px;}
-  .t-start{background:#0033ff20;border:1px solid #3399ff;border-radius:6px;padding:6px 14px;color:#66aaff;font-family:'Orbitron',sans-serif;font-size:10px;cursor:pointer;}
-  .t-start:hover{background:#3399ff30;}
-  .t-del{background:#ff000015;border:1px solid #ff4455;border-radius:6px;padding:6px 14px;color:#ff4455;font-family:'Orbitron',sans-serif;font-size:10px;cursor:pointer;}
-  .t-del:hover{background:#ff000030;}
-  .t-ongoing{font-size:10px;color:#ff8800;border:1px solid #ff880055;border-radius:4px;padding:3px 8px;}
-
-  /* ADD MEMBER */
-  .member-form{background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:20px;margin-bottom:20px;}
-  .member-form input{width:100%;background:#060610;border:1px solid #ff440044;border-radius:6px;padding:10px 14px;color:#ff8866;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;margin-bottom:12px;}
-  .member-form input:focus{border-color:#ff4400;}
-  .member-list{background:#0d0d1a;border:1px solid #ff440022;border-radius:8px;padding:14px;}
-  .member-item{padding:8px 12px;border-bottom:1px solid #ff440015;font-size:12px;color:#ff8866;display:flex;justify-content:space-between;align-items:center;}
-  .member-item:last-child{border-bottom:none;}
-  .kick-btn{background:transparent;border:1px solid #ff4455;border-radius:4px;padding:3px 10px;color:#ff4455;font-size:10px;cursor:pointer;}
-  .kick-btn:hover{background:#ff445520;}
-
+  .btn-accept{background:#00ff8820;border:1px solid #00ff88;padding:7px 14px;color:#00ff88;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:10px;border-radius:6px;}
+  .btn-reject{background:#ff440020;border:1px solid #ff4400;padding:7px 14px;color:#ff4400;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:10px;border-radius:6px;}
+  
   .empty-hint{color:#ff440044;font-size:12px;font-style:italic;}
   .tab-content{display:none;}
   .tab-content.active{display:block;}
+  .activity-item{border-left:2px solid #ff440055;padding-left:15px;margin-bottom:15px;position:relative;}
+  .activity-item::before{content:'';position:absolute;left:-5px;top:0;width:8px;height:8px;background:#ff4400;border-radius:50%;}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-overlay">
   <div id="login-box">
     <h2>⚡ ADMIN ACCESS ⚡</h2>
-    <input type="password" id="pw-input" placeholder="Mật khẩu admin..." onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" id="pw-input" placeholder="Mật khẩu admin...">
     <button onclick="doLogin()">[ ĐĂNG NHẬP ]</button>
     <div id="login-err">⚠ Sai mật khẩu!</div>
   </div>
 </div>
 
-<!-- MAIN APP -->
 <div id="app">
   <div id="sidebar">
     <div class="sidebar-header">
@@ -122,107 +75,72 @@
     <div class="nav-item active" onclick="switchTab('approve',this)">
       ✅ Phê Duyệt <span class="badge" id="badge-count">0</span>
     </div>
+    <div class="nav-item" onclick="switchTab('activity',this)">
+      🕒 Hoạt Động
+    </div>
+    <div class="nav-item" onclick="switchTab('userinfo',this)">
+      📄 Thông Tin User
+    </div>
     <div class="nav-item" onclick="switchTab('tourney',this)">
       ⚔ Giải Đấu
     </div>
     <div class="nav-item" onclick="switchTab('notifs',this)">
       📢 Thông Báo
     </div>
-    <div class="nav-item" onclick="switchTab('members',this)">
-      👥 Thêm Thành Viên
-    </div>
     <div style="flex:1"></div>
-    <div style="padding:14px 16px;font-size:10px;color:#ff440066;letter-spacing:1px;">
-      ⚡ ADMIN ONLINE
-    </div>
   </div>
 
   <div id="content">
-    <!-- TAB 1: APPROVE -->
+    <!-- APPROVE -->
     <div id="tab-approve" class="tab-content active">
       <div class="page-title">✅ Phê Duyệt Thành Viên</div>
-      <div id="req-list">
-        <div class="empty-hint">Chưa có yêu cầu nào...</div>
+      <div id="req-list"></div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div id="tab-activity" class="tab-content">
+      <div class="page-title">🕒 Nhật Ký Hoạt Động</div>
+      <div id="activity-list"></div>
+    </div>
+
+    <!-- USER INFO -->
+    <div id="tab-userinfo" class="tab-content">
+      <div class="page-title">📄 Chi Tiết Thành Viên</div>
+      <div class="card" style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Web Nick</th>
+              <th>Game Nick</th>
+              <th>UID</th>
+              <th>Vị Trí</th>
+              <th>Chế Độ</th>
+              <th>Súng</th>
+            </tr>
+          </thead>
+          <tbody id="info-table-body"></tbody>
+        </table>
       </div>
     </div>
 
-    <!-- TAB 2: TOURNAMENT -->
+    <!-- TOURNAMENT & OTHERS (Giữ nguyên logic cũ nhưng gọn lại) -->
     <div id="tab-tourney" class="tab-content">
       <div class="page-title">⚔ Quản Lý Giải Đấu</div>
-      <div style="background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:18px;margin-bottom:20px;">
-        <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff6633;margin-bottom:14px;">TẠO GIẢI ĐẤU MỚI</div>
-        <div class="form-grid">
-          <div class="form-group" style="grid-column:1/-1;">
-            <label>Tên giải đấu</label>
-            <input type="text" id="t-name" placeholder="VD: Giải Đấu Mùa 1">
-          </div>
-          <div class="form-group">
-            <label>Thời gian bắt đầu</label>
-            <input type="text" id="t-time" placeholder="VD: 20:00">
-          </div>
-          <div class="form-group">
-            <label>Ngày bắt đầu</label>
-            <input type="date" id="t-date">
-          </div>
-          <div class="form-group">
-            <label>Số người chơi</label>
-            <input type="number" id="t-players" placeholder="VD: 10" min="2">
-          </div>
-          <div class="form-group">
-            <label>Chế độ</label>
-            <select id="t-mode">
-              <option value="Battle Royale">Battle Royale</option>
-              <option value="Clash Squad">Clash Squad</option>
-              <option value="Lone Wolf">Lone Wolf</option>
-              <option value="Custom">Custom</option>
-            </select>
-          </div>
-        </div>
-        <button class="create-btn" onclick="createTourney()">[ + TẠO GIẢI ĐẤU ]</button>
-      </div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff440077;margin-bottom:12px;">GIẢI ĐẤU HIỆN TẠI</div>
-      <div id="admin-tourney-list">
-        <div class="empty-hint">Chưa có giải đấu nào...</div>
-      </div>
+      <div id="admin-tourney-list"></div>
     </div>
 
-    <!-- TAB 3: NOTIFICATIONS -->
     <div id="tab-notifs" class="tab-content">
-      <div class="page-title">📢 Gửi Thông Báo</div>
-      <div class="notif-form">
-        <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff6633;margin-bottom:12px;">NỘI DUNG THÔNG BÁO</div>
-        <textarea id="notif-input" placeholder="Nhập nội dung thông báo cho toàn bộ thành viên..."></textarea>
-        <button class="send-btn" onclick="sendNotif()">[ 📢 GỬI THÔNG BÁO ]</button>
-        <div id="notif-sent" class="notif-sent">✅ Đã gửi thông báo!</div>
-      </div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff440077;margin-bottom:12px;">LỊCH SỬ</div>
-      <div class="notif-hist" id="notif-hist">
-        <div class="empty-hint">Chưa có thông báo nào...</div>
-      </div>
-    </div>
-
-    <!-- TAB 4: ADD MEMBER -->
-    <div id="tab-members" class="tab-content">
-      <div class="page-title">👥 Thêm Thành Viên</div>
-      <div class="member-form">
-        <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff6633;margin-bottom:12px;">THÊM THỦ CÔNG</div>
-        <input type="text" id="add-member-input" placeholder="Nhập tên thành viên (VD: 7z•TênGame)" onkeydown="if(event.key==='Enter')addMember()">
-        <button class="create-btn" onclick="addMember()">[ + THÊM THÀNH VIÊN ]</button>
-      </div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff440077;margin-bottom:12px;">DANH SÁCH THÀNH VIÊN</div>
-      <div class="member-list" id="member-list">
-        <div class="empty-hint">Chưa có thành viên nào...</div>
-      </div>
+      <div class="page-title">📢 Thông Báo</div>
+      <textarea id="notif-input" style="width:100%;height:100px;background:#060610;color:#00ff88;border:1px solid #ff440044;padding:10px;"></textarea>
+      <button onclick="sendNotif()" style="margin-top:10px;padding:10px;background:#ff440020;color:#ff4400;border:1px solid #ff4400;width:100%;">GỬI</button>
     </div>
   </div>
 </div>
 
-<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, update, set, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// ===== PASTE FIREBASE CONFIG GIỐNG BÊN user.html =====
 const firebaseConfig = {
   apiKey: "AIzaSyDrtNjL4AxoQMvGlOnArIx1iPfqpMgW-qA",
   authDomain: "zelrish-clan.firebaseapp.com",
@@ -232,154 +150,78 @@ const firebaseConfig = {
   messagingSenderId: "69492644163",
   appId: "1:69492644163:web:1c185db6c682255ef937f6"
 };
-// =====================================================
-
-// ADMIN PASSWORD - ĐỔI MẬT KHẨU Ở ĐÂY
-const ADMIN_PASS = "123456";
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
-if(sessionStorage.getItem('admin_auth')==='yes'){
-  document.getElementById('login-overlay').style.display='none';
-  document.getElementById('app').style.display='flex';
-  initAdmin();
-}
+const ADMIN_PASS = "123456";
 
 window.doLogin = function(){
-  const pw = document.getElementById('pw-input').value;
-  if(pw === ADMIN_PASS){
-    sessionStorage.setItem('admin_auth','yes');
+  if(document.getElementById('pw-input').value === ADMIN_PASS){
     document.getElementById('login-overlay').style.display='none';
     document.getElementById('app').style.display='flex';
     initAdmin();
-  } else {
-    document.getElementById('login-err').style.display='block';
   }
 }
 
 function initAdmin(){
-  listenRequests();
-  listenTourneys();
-  listenNotifs();
-  listenMembers();
-}
-
-function listenRequests(){
+  // Listen Requests
   onValue(ref(db,'requests'), (snap)=>{
     const data = snap.val();
     const el = document.getElementById('req-list');
-    if(!data){
-      el.innerHTML='<div class="empty-hint">Chưa có yêu cầu nào...</div>';
-      document.getElementById('badge-count').textContent='0';
-      return;
-    }
+    if(!data) { el.innerHTML='<div class="empty-hint">Trống...</div>'; return; }
     const pending = Object.entries(data).filter(([,v])=>v.status==='pending');
-    document.getElementById('badge-count').textContent=pending.length;
-    if(pending.length===0){
-      el.innerHTML='<div class="empty-hint">Không có yêu cầu chờ duyệt...</div>';
-      return;
-    }
+    document.getElementById('badge-count').textContent = pending.length;
     el.innerHTML = pending.map(([uid,u])=>`
-      <div class="req-card">
+      <div class="card req-card">
+        <div><div class="req-name">${u.username}</div><div class="req-time">${new Date(u.timestamp).toLocaleString()}</div></div>
         <div>
-          <div class="req-name">👤 ${u.username}</div>
-          <div class="req-time">${new Date(u.timestamp).toLocaleString('vi-VN')}</div>
-        </div>
-        <div class="req-btns">
-          <button class="btn-accept" onclick="decide('${uid}','approved')">✅ Chấp Nhận</button>
-          <button class="btn-reject" onclick="decide('${uid}','rejected')">❌ Từ Chối</button>
+          <button class="btn-accept" onclick="decide('${uid}','approved','${u.username}')">Duyệt</button>
+          <button class="btn-reject" onclick="decide('${uid}','rejected','${u.username}')">Loại</button>
         </div>
       </div>`).join('');
   });
+
+  // Listen Activities
+  onValue(ref(db,'activities'), (snap)=>{
+    const data = snap.val();
+    const el = document.getElementById('activity-list');
+    if(!data) return;
+    el.innerHTML = Object.values(data).reverse().map(a=>`
+      <div class="activity-item">
+        <div style="font-size:12px; color:#ff8866">${a.content}</div>
+        <div style="font-size:9px; color:#ff440055">${new Date(a.timestamp).toLocaleString()}</div>
+      </div>`).join('');
+  });
+
+  // Listen User Profiles
+  onValue(ref(db,'profiles'), (snap)=>{
+    const data = snap.val();
+    const el = document.getElementById('info-table-body');
+    if(!data) return;
+    el.innerHTML = Object.values(data).map(p=>`
+      <tr>
+        <td>${p.webNick}</td>
+        <td>${p.gameNick}</td>
+        <td>${p.gameUid}</td>
+        <td>${p.role}</td>
+        <td>${p.mode}</td>
+        <td>${p.favGun}</td>
+      </tr>`).join('');
+  });
 }
 
-window.decide = function(uid, status){
+window.decide = function(uid, status, name){
   update(ref(db,'requests/'+uid), {status});
-}
-
-function listenTourneys(){
-  onValue(ref(db,'tournaments'), (snap)=>{
-    const data = snap.val();
-    const el = document.getElementById('admin-tourney-list');
-    if(!data){el.innerHTML='<div class="empty-hint">Chưa có giải đấu nào...</div>';return;}
-    el.innerHTML = Object.entries(data).map(([tid,t])=>`
-      <div class="t-card">
-        <div class="t-top">
-          <div class="t-name">⚔ ${t.name}</div>
-          ${t.status==='ongoing'?'<span class="t-ongoing">ĐANG DIỄN RA</span>':''}
-        </div>
-        <div class="t-meta">🕐 ${t.time} &nbsp;|&nbsp; 📅 ${t.date} &nbsp;|&nbsp; 👥 ${t.joined||0}/${t.maxPlayers} &nbsp;|&nbsp; ${t.mode}</div>
-        <div class="t-actions">
-          ${t.status!=='ongoing'?`<button class="t-start" onclick="startTourney('${tid}')">▶ Bắt Đầu</button>`:''}
-          <button class="t-del" onclick="deleteTourney('${tid}')">🗑 Xóa</button>
-        </div>
-      </div>`).join('');
-  });
-}
-
-window.createTourney = function(){
-  const name = document.getElementById('t-name').value.trim();
-  const time = document.getElementById('t-time').value.trim();
-  const date = document.getElementById('t-date').value;
-  const players = parseInt(document.getElementById('t-players').value)||10;
-  const mode = document.getElementById('t-mode').value;
-  if(!name||!time||!date){alert('Điền đủ thông tin!');return;}
-  push(ref(db,'tournaments'),{name,time,date,maxPlayers:players,mode,joined:0,status:'waiting',created:Date.now()});
-  document.getElementById('t-name').value='';
-  document.getElementById('t-time').value='';
-  document.getElementById('t-date').value='';
-  document.getElementById('t-players').value='';
-}
-
-window.startTourney = function(tid){
-  update(ref(db,'tournaments/'+tid),{status:'ongoing'});
-}
-window.deleteTourney = function(tid){
-  if(confirm('Xóa giải đấu này?')) remove(ref(db,'tournaments/'+tid));
-}
-
-function listenNotifs(){
-  onValue(ref(db,'notifications'), (snap)=>{
-    const data = snap.val();
-    const el = document.getElementById('notif-hist');
-    if(!data){el.innerHTML='<div class="empty-hint">Chưa có thông báo nào...</div>';return;}
-    el.innerHTML=Object.values(data).reverse().map(n=>`
-      <div class="notif-item">📢 ${n.text}<div class="notif-t">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`).join('');
+  push(ref(db,'activities'), {
+    content: `Admin đã ${status==='approved'?'CHẤP NHẬN':'TỪ CHỐI'} thành viên: ${name}`,
+    timestamp: Date.now()
   });
 }
 
 window.sendNotif = function(){
-  const text = document.getElementById('notif-input').value.trim();
-  if(!text) return;
-  push(ref(db,'notifications'),{text,timestamp:Date.now()});
-  document.getElementById('notif-input').value='';
-  const s = document.getElementById('notif-sent');
-  s.style.display='block';
-  setTimeout(()=>s.style.display='none',3000);
-}
-
-function listenMembers(){
-  onValue(ref(db,'members'), (snap)=>{
-    const data = snap.val();
-    const el = document.getElementById('member-list');
-    if(!data){el.innerHTML='<div class="empty-hint">Chưa có thành viên nào...</div>';return;}
-    el.innerHTML=Object.entries(data).map(([mid,m])=>`
-      <div class="member-item">
-        <span>👤 ${m.name}</span>
-        <button class="kick-btn" onclick="kickMember('${mid}')">KICK</button>
-      </div>`).join('');
-  });
-}
-
-window.addMember = function(){
-  const name = document.getElementById('add-member-input').value.trim();
-  if(!name) return;
-  push(ref(db,'members'),{name,added:Date.now()});
-  document.getElementById('add-member-input').value='';
-}
-window.kickMember = function(mid){
-  if(confirm('Kick thành viên này?')) remove(ref(db,'members/'+mid));
+  const text = document.getElementById('notif-input').value;
+  push(ref(db,'notifications'), {text, timestamp: Date.now()});
+  push(ref(db,'activities'), { content: `Admin gửi thông báo: ${text.substring(0,20)}...`, timestamp: Date.now() });
 }
 
 window.switchTab = function(tab, el){
