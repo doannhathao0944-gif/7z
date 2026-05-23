@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7z•Zelrish | ADMIN PANEL</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0a0a0f;color:#00ff88;font-family:'Share Tech Mono',monospace;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,0.015) 2px,rgba(0,255,136,0.015) 4px);pointer-events:none;z-index:0;}
+
+  /* LOGIN */
+  #login-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;z-index:9999;}
+  #login-box{background:#0d0d1a;border:1px solid #ff4400;border-radius:12px;padding:32px 28px;width:320px;box-shadow:0 0 30px rgba(255,68,0,0.2);}
+  #login-box h2{font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:3px;color:#ff4400;text-align:center;margin-bottom:20px;}
+  #login-box input{width:100%;background:#060610;border:1px solid #ff440055;border-radius:6px;padding:10px 14px;color:#ff8866;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;margin-bottom:12px;}
+  #login-box input:focus{border-color:#ff4400;box-shadow:0 0 8px rgba(255,68,0,0.3);}
+  #login-box button{width:100%;background:#ff440020;border:1px solid #ff4400;border-radius:6px;padding:11px;color:#ff4400;font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;}
+  #login-box button:hover{background:#ff440040;}
+  #login-err{color:#ff4455;font-size:11px;text-align:center;margin-top:10px;display:none;}
+
+  /* APP LAYOUT */
+  #app{display:none;height:100vh;flex-direction:row;}
+
+  /* SIDEBAR */
+  #sidebar{width:230px;background:#0a0a14;border-right:1px solid #ff440022;display:flex;flex-direction:column;flex-shrink:0;}
+  .sidebar-header{padding:18px 16px;border-bottom:1px solid #ff440022;}
+  .sidebar-header h1{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:3px;color:#ff4400;}
+  .sidebar-header .sub{font-size:10px;color:#ff440077;margin-top:4px;letter-spacing:1px;}
+  .nav-item{padding:13px 20px;cursor:pointer;font-size:12px;letter-spacing:1px;color:#cc4400;border-left:3px solid transparent;transition:all .2s;display:flex;align-items:center;gap:10px;}
+  .nav-item:hover{color:#ff8866;background:#ff440008;border-left-color:#ff440044;}
+  .nav-item.active{color:#ff6633;background:#ff440015;border-left-color:#ff4400;}
+  .badge{background:#ff4400;color:#0a0a0f;font-size:9px;padding:2px 6px;border-radius:10px;font-family:'Orbitron',sans-serif;min-width:18px;text-align:center;}
+
+  /* CONTENT */
+  #content{flex:1;overflow-y:auto;padding:24px;background:#0a0a0f;}
+  #content::-webkit-scrollbar{width:4px;}
+  #content::-webkit-scrollbar-track{background:#0a0a0f;}
+  #content::-webkit-scrollbar-thumb{background:#ff440044;border-radius:2px;}
+
+  .page-title{font-family:'Orbitron',sans-serif;font-size:15px;letter-spacing:3px;color:#ff6633;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid #ff440022;text-transform:uppercase;}
+
+  /* REQUEST CARDS */
+  .req-card{background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .req-name{font-family:'Orbitron',sans-serif;font-size:12px;color:#ff8866;letter-spacing:1px;}
+  .req-time{font-size:10px;color:#ff440066;margin-top:3px;}
+  .req-btns{display:flex;gap:8px;flex-shrink:0;}
+  .btn-accept{background:#00ff8820;border:1px solid #00ff88;border-radius:6px;padding:7px 14px;color:#00ff88;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+  .btn-accept:hover{background:#00ff8840;box-shadow:0 0 10px rgba(0,255,136,0.3);}
+  .btn-reject{background:#ff440020;border:1px solid #ff4400;border-radius:6px;padding:7px 14px;color:#ff4400;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+  .btn-reject:hover{background:#ff440040;}
+
+  /* NOTIFICATIONS TAB */
+  .notif-form{background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:18px;margin-bottom:20px;}
+  .notif-form textarea{width:100%;background:#060610;border:1px solid #ff440044;border-radius:6px;padding:10px 14px;color:#ff8866;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;resize:vertical;min-height:80px;}
+  .notif-form textarea:focus{border-color:#ff4400;}
+  .send-btn{margin-top:10px;background:#ff440020;border:1px solid #ff4400;border-radius:6px;padding:9px 20px;color:#ff4400;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;cursor:pointer;}
+  .send-btn:hover{background:#ff440040;}
+  .notif-sent{font-size:11px;color:#00ff88;margin-top:8px;display:none;}
+  .notif-hist{background:#0d0d1a;border:1px solid #ff440022;border-radius:8px;padding:14px;}
+  .notif-item{padding:8px 0;border-bottom:1px solid #ff440015;font-size:12px;color:#ff8866;}
+  .notif-item:last-child{border-bottom:none;}
+  .notif-t{font-size:10px;color:#ff440066;margin-top:3px;}
+
+  /* TOURNAMENT FORM */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+  .form-group{display:flex;flex-direction:column;gap:6px;}
+  .form-group label{font-size:10px;letter-spacing:2px;color:#ff440099;text-transform:uppercase;}
+  .form-group input, .form-group select{background:#060610;border:1px solid #ff440044;border-radius:6px;padding:9px 12px;color:#ff8866;font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;}
+  .form-group input:focus, .form-group select:focus{border-color:#ff4400;}
+  .form-group select option{background:#0d0d1a;}
+  .create-btn{width:100%;background:#ff440020;border:1px solid #ff4400;border-radius:6px;padding:10px;color:#ff4400;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;cursor:pointer;margin-top:4px;}
+  .create-btn:hover{background:#ff440035;}
+
+  /* TOURNAMENT ADMIN CARDS */
+  .t-card{background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:14px;margin-bottom:12px;}
+  .t-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .t-name{font-family:'Orbitron',sans-serif;font-size:12px;color:#ff8866;}
+  .t-meta{font-size:11px;color:#ff440077;margin-bottom:10px;}
+  .t-actions{display:flex;gap:8px;}
+  .t-start{background:#0033ff20;border:1px solid #3399ff;border-radius:6px;padding:6px 14px;color:#66aaff;font-family:'Orbitron',sans-serif;font-size:10px;cursor:pointer;}
+  .t-start:hover{background:#3399ff30;}
+  .t-del{background:#ff000015;border:1px solid #ff4455;border-radius:6px;padding:6px 14px;color:#ff4455;font-family:'Orbitron',sans-serif;font-size:10px;cursor:pointer;}
+  .t-del:hover{background:#ff000030;}
+  .t-ongoing{font-size:10px;color:#ff8800;border:1px solid #ff880055;border-radius:4px;padding:3px 8px;}
+
+  /* ADD MEMBER */
+  .member-form{background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:20px;margin-bottom:20px;}
+  .member-form input{width:100%;background:#060610;border:1px solid #ff440044;border-radius:6px;padding:10px 14px;color:#ff8866;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;margin-bottom:12px;}
+  .member-form input:focus{border-color:#ff4400;}
+  .member-list{background:#0d0d1a;border:1px solid #ff440022;border-radius:8px;padding:14px;}
+  .member-item{padding:8px 12px;border-bottom:1px solid #ff440015;font-size:12px;color:#ff8866;display:flex;justify-content:space-between;align-items:center;}
+  .member-item:last-child{border-bottom:none;}
+  .kick-btn{background:transparent;border:1px solid #ff4455;border-radius:4px;padding:3px 10px;color:#ff4455;font-size:10px;cursor:pointer;}
+  .kick-btn:hover{background:#ff445520;}
+
+  .empty-hint{color:#ff440044;font-size:12px;font-style:italic;}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-overlay">
+  <div id="login-box">
+    <h2>⚡ ADMIN ACCESS ⚡</h2>
+    <input type="password" id="pw-input" placeholder="Mật khẩu admin..." onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">[ ĐĂNG NHẬP ]</button>
+    <div id="login-err">⚠ Sai mật khẩu!</div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div id="sidebar">
+    <div class="sidebar-header">
+      <h1>7z•ZELRISH</h1>
+      <div class="sub">ADMIN PANEL</div>
+    </div>
+    <div class="nav-item active" onclick="switchTab('approve',this)">
+      ✅ Phê Duyệt <span class="badge" id="badge-count">0</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('tourney',this)">
+      ⚔ Giải Đấu
+    </div>
+    <div class="nav-item" onclick="switchTab('notifs',this)">
+      📢 Thông Báo
+    </div>
+    <div class="nav-item" onclick="switchTab('members',this)">
+      👥 Thêm Thành Viên
+    </div>
+    <div style="flex:1"></div>
+    <div style="padding:14px 16px;font-size:10px;color:#ff440066;letter-spacing:1px;">
+      ⚡ ADMIN ONLINE
+    </div>
+  </div>
+
+  <div id="content">
+    <!-- TAB 1: APPROVE -->
+    <div id="tab-approve" class="tab-content active">
+      <div class="page-title">✅ Phê Duyệt Thành Viên</div>
+      <div id="req-list">
+        <div class="empty-hint">Chưa có yêu cầu nào...</div>
+      </div>
+    </div>
+
+    <!-- TAB 2: TOURNAMENT -->
+    <div id="tab-tourney" class="tab-content">
+      <div class="page-title">⚔ Quản Lý Giải Đấu</div>
+      <div style="background:#0d0d1a;border:1px solid #ff440033;border-radius:10px;padding:18px;margin-bottom:20px;">
+        <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff6633;margin-bottom:14px;">TẠO GIẢI ĐẤU MỚI</div>
+        <div class="form-grid">
+          <div class="form-group" style="grid-column:1/-1;">
+            <label>Tên giải đấu</label>
+            <input type="text" id="t-name" placeholder="VD: Giải Đấu Mùa 1">
+          </div>
+          <div class="form-group">
+            <label>Thời gian bắt đầu</label>
+            <input type="text" id="t-time" placeholder="VD: 20:00">
+          </div>
+          <div class="form-group">
+            <label>Ngày bắt đầu</label>
+            <input type="date" id="t-date">
+          </div>
+          <div class="form-group">
+            <label>Số người chơi</label>
+            <input type="number" id="t-players" placeholder="VD: 10" min="2">
+          </div>
+          <div class="form-group">
+            <label>Chế độ</label>
+            <select id="t-mode">
+              <option value="Battle Royale">Battle Royale</option>
+              <option value="Clash Squad">Clash Squad</option>
+              <option value="Lone Wolf">Lone Wolf</option>
+              <option value="Custom">Custom</option>
+            </select>
+          </div>
+        </div>
+        <button class="create-btn" onclick="createTourney()">[ + TẠO GIẢI ĐẤU ]</button>
+      </div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff440077;margin-bottom:12px;">GIẢI ĐẤU HIỆN TẠI</div>
+      <div id="admin-tourney-list">
+        <div class="empty-hint">Chưa có giải đấu nào...</div>
+      </div>
+    </div>
+
+    <!-- TAB 3: NOTIFICATIONS -->
+    <div id="tab-notifs" class="tab-content">
+      <div class="page-title">📢 Gửi Thông Báo</div>
+      <div class="notif-form">
+        <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff6633;margin-bottom:12px;">NỘI DUNG THÔNG BÁO</div>
+        <textarea id="notif-input" placeholder="Nhập nội dung thông báo cho toàn bộ thành viên..."></textarea>
+        <button class="send-btn" onclick="sendNotif()">[ 📢 GỬI THÔNG BÁO ]</button>
+        <div id="notif-sent" class="notif-sent">✅ Đã gửi thông báo!</div>
+      </div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff440077;margin-bottom:12px;">LỊCH SỬ</div>
+      <div class="notif-hist" id="notif-hist">
+        <div class="empty-hint">Chưa có thông báo nào...</div>
+      </div>
+    </div>
+
+    <!-- TAB 4: ADD MEMBER -->
+    <div id="tab-members" class="tab-content">
+      <div class="page-title">👥 Thêm Thành Viên</div>
+      <div class="member-form">
+        <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff6633;margin-bottom:12px;">THÊM THỦ CÔNG</div>
+        <input type="text" id="add-member-input" placeholder="Nhập tên thành viên (VD: 7z•TênGame)" onkeydown="if(event.key==='Enter')addMember()">
+        <button class="create-btn" onclick="addMember()">[ + THÊM THÀNH VIÊN ]</button>
+      </div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#ff440077;margin-bottom:12px;">DANH SÁCH THÀNH VIÊN</div>
+      <div class="member-list" id="member-list">
+        <div class="empty-hint">Chưa có thành viên nào...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, update, set, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// ===== PASTE FIREBASE CONFIG GIỐNG BÊN user.html =====
+const firebaseConfig = {
+  apiKey: "PASTE_API_KEY_HERE",
+  authDomain: "PASTE_AUTH_DOMAIN_HERE",
+  databaseURL: "PASTE_DATABASE_URL_HERE",
+  projectId: "PASTE_PROJECT_ID_HERE",
+  storageBucket: "PASTE_STORAGE_BUCKET_HERE",
+  messagingSenderId: "PASTE_SENDER_ID_HERE",
+  appId: "PASTE_APP_ID_HERE"
+};
+// =====================================================
+
+// ADMIN PASSWORD - ĐỔI MẬT KHẨU Ở ĐÂY
+const ADMIN_PASS = "zelrish7z";
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+if(sessionStorage.getItem('admin_auth')==='yes'){
+  document.getElementById('login-overlay').style.display='none';
+  document.getElementById('app').style.display='flex';
+  initAdmin();
+}
+
+window.doLogin = function(){
+  const pw = document.getElementById('pw-input').value;
+  if(pw === ADMIN_PASS){
+    sessionStorage.setItem('admin_auth','yes');
+    document.getElementById('login-overlay').style.display='none';
+    document.getElementById('app').style.display='flex';
+    initAdmin();
+  } else {
+    document.getElementById('login-err').style.display='block';
+  }
+}
+
+function initAdmin(){
+  listenRequests();
+  listenTourneys();
+  listenNotifs();
+  listenMembers();
+}
+
+function listenRequests(){
+  onValue(ref(db,'requests'), (snap)=>{
+    const data = snap.val();
+    const el = document.getElementById('req-list');
+    if(!data){
+      el.innerHTML='<div class="empty-hint">Chưa có yêu cầu nào...</div>';
+      document.getElementById('badge-count').textContent='0';
+      return;
+    }
+    const pending = Object.entries(data).filter(([,v])=>v.status==='pending');
+    document.getElementById('badge-count').textContent=pending.length;
+    if(pending.length===0){
+      el.innerHTML='<div class="empty-hint">Không có yêu cầu chờ duyệt...</div>';
+      return;
+    }
+    el.innerHTML = pending.map(([uid,u])=>`
+      <div class="req-card">
+        <div>
+          <div class="req-name">👤 ${u.username}</div>
+          <div class="req-time">${new Date(u.timestamp).toLocaleString('vi-VN')}</div>
+        </div>
+        <div class="req-btns">
+          <button class="btn-accept" onclick="decide('${uid}','approved')">✅ Chấp Nhận</button>
+          <button class="btn-reject" onclick="decide('${uid}','rejected')">❌ Từ Chối</button>
+        </div>
+      </div>`).join('');
+  });
+}
+
+window.decide = function(uid, status){
+  update(ref(db,'requests/'+uid), {status});
+}
+
+function listenTourneys(){
+  onValue(ref(db,'tournaments'), (snap)=>{
+    const data = snap.val();
+    const el = document.getElementById('admin-tourney-list');
+    if(!data){el.innerHTML='<div class="empty-hint">Chưa có giải đấu nào...</div>';return;}
+    el.innerHTML = Object.entries(data).map(([tid,t])=>`
+      <div class="t-card">
+        <div class="t-top">
+          <div class="t-name">⚔ ${t.name}</div>
+          ${t.status==='ongoing'?'<span class="t-ongoing">ĐANG DIỄN RA</span>':''}
+        </div>
+        <div class="t-meta">🕐 ${t.time} &nbsp;|&nbsp; 📅 ${t.date} &nbsp;|&nbsp; 👥 ${t.joined||0}/${t.maxPlayers} &nbsp;|&nbsp; ${t.mode}</div>
+        <div class="t-actions">
+          ${t.status!=='ongoing'?`<button class="t-start" onclick="startTourney('${tid}')">▶ Bắt Đầu</button>`:''}
+          <button class="t-del" onclick="deleteTourney('${tid}')">🗑 Xóa</button>
+        </div>
+      </div>`).join('');
+  });
+}
+
+window.createTourney = function(){
+  const name = document.getElementById('t-name').value.trim();
+  const time = document.getElementById('t-time').value.trim();
+  const date = document.getElementById('t-date').value;
+  const players = parseInt(document.getElementById('t-players').value)||10;
+  const mode = document.getElementById('t-mode').value;
+  if(!name||!time||!date){alert('Điền đủ thông tin!');return;}
+  push(ref(db,'tournaments'),{name,time,date,maxPlayers:players,mode,joined:0,status:'waiting',created:Date.now()});
+  document.getElementById('t-name').value='';
+  document.getElementById('t-time').value='';
+  document.getElementById('t-date').value='';
+  document.getElementById('t-players').value='';
+}
+
+window.startTourney = function(tid){
+  update(ref(db,'tournaments/'+tid),{status:'ongoing'});
+}
+window.deleteTourney = function(tid){
+  if(confirm('Xóa giải đấu này?')) remove(ref(db,'tournaments/'+tid));
+}
+
+function listenNotifs(){
+  onValue(ref(db,'notifications'), (snap)=>{
+    const data = snap.val();
+    const el = document.getElementById('notif-hist');
+    if(!data){el.innerHTML='<div class="empty-hint">Chưa có thông báo nào...</div>';return;}
+    el.innerHTML=Object.values(data).reverse().map(n=>`
+      <div class="notif-item">📢 ${n.text}<div class="notif-t">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`).join('');
+  });
+}
+
+window.sendNotif = function(){
+  const text = document.getElementById('notif-input').value.trim();
+  if(!text) return;
+  push(ref(db,'notifications'),{text,timestamp:Date.now()});
+  document.getElementById('notif-input').value='';
+  const s = document.getElementById('notif-sent');
+  s.style.display='block';
+  setTimeout(()=>s.style.display='none',3000);
+}
+
+function listenMembers(){
+  onValue(ref(db,'members'), (snap)=>{
+    const data = snap.val();
+    const el = document.getElementById('member-list');
+    if(!data){el.innerHTML='<div class="empty-hint">Chưa có thành viên nào...</div>';return;}
+    el.innerHTML=Object.entries(data).map(([mid,m])=>`
+      <div class="member-item">
+        <span>👤 ${m.name}</span>
+        <button class="kick-btn" onclick="kickMember('${mid}')">KICK</button>
+      </div>`).join('');
+  });
+}
+
+window.addMember = function(){
+  const name = document.getElementById('add-member-input').value.trim();
+  if(!name) return;
+  push(ref(db,'members'),{name,added:Date.now()});
+  document.getElementById('add-member-input').value='';
+}
+window.kickMember = function(mid){
+  if(confirm('Kick thành viên này?')) remove(ref(db,'members/'+mid));
+}
+
+window.switchTab = function(tab, el){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(el) el.classList.add('active');
+}
+</script>
+</body>
+</html>
