@@ -29,7 +29,7 @@
   #app{display:none;height:100vh;flex-direction:row;}
   
   /* SIDEBAR */
-  #sidebar{width:220px;background:#0a0a14;border-right:1px solid #00ff8822;display:flex;flex-direction:column;flex-shrink:0;}
+  #sidebar{width:240px;background:#0a0a14;border-right:1px solid #00ff8822;display:flex;flex-direction:column;flex-shrink:0;}
   #sidebar-logo{padding:18px 16px 14px;border-bottom:1px solid #00ff8822;}
   #sidebar-logo img{width:100%;border-radius:10px;display:block;max-height:80px;object-fit:cover;}
   #sidebar-logo .clan-name{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#00ff88;text-align:center;margin-top:8px;}
@@ -81,8 +81,15 @@
   .rules-block .rule-title{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#00ff88;margin-bottom:8px;}
   .rules-block .sep{border:none;border-top:1px solid #00ff8822;margin:14px 0;}
 
-  /* CUSTOMIZE */
-  .locked-msg{background:#0d0d1a;border:1px solid #ff440033;border-radius:8px;padding:24px;text-align:center;color:#ff4455;font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2px;}
+  /* FORM THÔNG TIN (MỚI) */
+  .info-form{background:#0d0d1a;border:1px solid #00ff8833;border-radius:10px;padding:20px;margin-bottom:20px;}
+  .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:15px;}
+  .form-group label{font-size:11px;letter-spacing:2px;color:#00ff8899;text-transform:uppercase;}
+  .form-group input, .form-group select{background:#060610;border:1px solid #00ff8844;border-radius:6px;padding:10px 14px;color:#00ff88;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;}
+  .form-group input:focus, .form-group select:focus{border-color:#00ff88;box-shadow:0 0 8px rgba(0,255,136,0.2);}
+  .save-btn{width:100%;background:#00ff8820;border:1px solid #00ff88;border-radius:6px;padding:11px;color:#00ff88;font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;transition:all .2s;}
+  .save-btn:hover{background:#00ff8840;box-shadow:0 0 15px rgba(0,255,136,0.3);}
+  .saved-msg{font-size:11px;color:#00ff88;margin-top:10px;display:none;text-align:center;}
 
   /* MODAL */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:999;}
@@ -119,22 +126,12 @@
       <img src="https://i.ibb.co/Cp488NL3/1777131359417.png" alt="7z•Zelrish" onerror="this.style.display='none'">
       <div class="clan-name">7z•ZELRISH</div>
     </div>
-    <div class="nav-item active" onclick="switchTab('home',this)">
-      <span class="nav-icon">⌂</span> Trang Chủ
-    </div>
-    <div class="nav-item" onclick="switchTab('tourney',this)">
-      <span class="nav-icon">⚔</span> Giải Đấu
-    </div>
-    <div class="nav-item" onclick="switchTab('rules',this)">
-      <span class="nav-icon">📋</span> Luật Quân Đoàn
-    </div>
-    <div class="nav-item" onclick="switchTab('settings',this)">
-      <span class="nav-icon">⚙</span> Tùy Chỉnh
-    </div>
+    <div class="nav-item active" onclick="switchTab('home',this)"><span class="nav-icon">⌂</span> Trang Chủ</div>
+    <div class="nav-item" onclick="switchTab('tourney',this)"><span class="nav-icon">⚔</span> Giải Đấu</div>
+    <div class="nav-item" onclick="switchTab('rules',this)"><span class="nav-icon">📋</span> Luật Quân Đoàn</div>
+    <div class="nav-item" onclick="switchTab('info',this)"><span class="nav-icon">📝</span> Thông Tin Cá Nhân</div>
     <div style="flex:1"></div>
-    <div style="padding:14px 16px;font-size:10px;color:#00ff8844;letter-spacing:1px;">
-      <span class="online-dot"></span>ONLINE
-    </div>
+    <div style="padding:14px 16px;font-size:10px;color:#00ff8844;letter-spacing:1px;"><span class="online-dot"></span>ONLINE</div>
   </div>
 
   <div id="content">
@@ -142,95 +139,62 @@
     <div id="tab-home" class="tab-content active">
       <div class="page-title">⌂ Trang Chủ</div>
       <div class="card-grid">
-        <div class="dash-card" onclick="showModal('Admin đang chỉnh sửa...')">
-          <div class="card-icon">👤</div>
-          <div class="card-label">Thông Tin</div>
-        </div>
-        <div class="dash-card" onclick="switchTab('tourney',null)">
-          <div class="card-icon">⚔</div>
-          <div class="card-label">Giải Đấu</div>
-        </div>
-        <div class="dash-card" onclick="switchTab('rules',null)">
-          <div class="card-icon">📋</div>
-          <div class="card-label">Luật Quân Đoàn</div>
-        </div>
-        <div class="dash-card" onclick="showModal('Danh sách thành viên đang cập nhật...')">
-          <div class="card-icon">👥</div>
-          <div class="card-label">Thành Viên</div>
-        </div>
+        <div class="dash-card" onclick="switchTab('info',null)"><div class="card-icon">📝</div><div class="card-label">Khai Báo</div></div>
+        <div class="dash-card" onclick="switchTab('tourney',null)"><div class="card-icon">⚔</div><div class="card-label">Giải Đấu</div></div>
+        <div class="dash-card" onclick="switchTab('rules',null)"><div class="card-icon">📋</div><div class="card-label">Luật Quân Đoàn</div></div>
+        <div class="dash-card" onclick="showModal('Liên hệ Admin để biết thêm chi tiết.')"><div class="card-icon">👥</div><div class="card-label">Thành Viên</div></div>
       </div>
       <div class="notif-label">▶ Thông Báo</div>
-      <div class="notif-box" id="notif-list">
-        <div class="notif-empty">Chưa có thông báo...</div>
-      </div>
+      <div class="notif-box" id="notif-list"><div class="notif-empty">Chưa có thông báo...</div></div>
     </div>
 
     <!-- TAB 2: TOURNAMENT -->
     <div id="tab-tourney" class="tab-content">
       <div class="page-title">⚔ Giải Đấu</div>
-      <div id="tourney-list">
-        <div class="notif-empty" style="color:#00ff8844;font-size:12px;">Chưa có giải đấu nào...</div>
-      </div>
+      <div id="tourney-list"><div class="notif-empty" style="color:#00ff8844;font-size:12px;">Chưa có giải đấu nào...</div></div>
     </div>
 
     <!-- TAB 3: RULES -->
     <div id="tab-rules" class="tab-content">
       <div class="page-title">📋 Luật Quân Đoàn</div>
       <div class="rules-block">
-        <div class="rule-section">
-          <div class="rule-title">[ YÊU CẦU GIA NHẬP ]</div>
-          Level : 40<br>
-          Rank BR : Kim Cương 1-5<br>
-          Rank CS : Huyền Thoại (ưu tiên Cao Thủ)<br>
-          1 tuần cày trên 1k5 điểm<br>
-          Không cần đổi tên
-        </div>
+        <div class="rule-section"><div class="rule-title">[ YÊU CẦU GIA NHẬP ]</div>Level : 40<br>Rank BR : Kim Cương 1-5<br>Rank CS : Huyền Thoại (ưu tiên Cao Thủ)<br>1 tuần cày trên 1k5 điểm<br>Không cần đổi tên</div>
         <hr class="sep">
-        <div class="rule-section">
-          <div class="rule-title">[ VỀ QUÂN ĐOÀN ]</div>
-          Quân đoàn có website<br>
-          Quân đoàn không quan trọng tuổi tác<br>
-          Tab QD : Vui vẻ, Hoà đồng, chuyên phòng, Mic on<br>
-          Cày 5k điểm/1 tuần thì được thăng cấp<br>
-          Cuối tuần cày Quân Đoàn Chiến<br>
-          Không tiện mic thì không sao<br>
-          Vô Quân Đoàn 3 ngày dưới 300 điểm = kick<br>
-          Mic = Ồn bể loa càng tốt<br>
-          Có Box Mess, Tiktok
-        </div>
+        <div class="rule-section"><div class="rule-title">[ VỀ QUÂN ĐOÀN ]</div>Quân đoàn có website<br>Quân đoàn không quan trọng tuổi tác<br>Tab QD : Vui vẻ, Hoà đồng, chuyên phòng, Mic on<br>Cày 5k điểm/1 tuần thì được thăng cấp<br>Cuối tuần cày Quân Đoàn Chiến<br>Không tiện mic thì không sao<br>Vô Quân Đoàn 3 ngày dưới 300 điểm = kick<br>Mic = Ồn bể loa càng tốt<br>Có Box Mess, Tiktok</div>
         <hr class="sep">
-        <div class="rule-section">
-          <div class="rule-title">[ LUẬT ]</div>
-          Không tục tiểu, không tà dâm<br>
-          Hoà đồng với TV khác trong QD
-        </div>
+        <div class="rule-section"><div class="rule-title">[ LUẬT ]</div>Không tục tiểu, không tà dâm<br>Hoà đồng với TV khác trong QD</div>
       </div>
     </div>
 
-    <!-- TAB 4: CUSTOMIZE -->
-    <div id="tab-settings" class="tab-content">
-      <div class="page-title">⚙ Tùy Chỉnh</div>
-      <div class="locked-msg">
-        🔒<br><br>Chưa được phép thao tác
+    <!-- TAB 4: THÔNG TIN CÁ NHÂN (MỚI) -->
+    <div id="tab-info" class="tab-content">
+      <div class="page-title">📝 Khai Báo Thông Tin</div>
+      <div class="info-form">
+        <div class="form-group"><label>1. Tên nick trên web</label><input type="text" id="f_webname" placeholder="VD: 7z•Zelrish"></div>
+        <div class="form-group"><label>2. Tên nick Game</label><input type="text" id="f_gamename" placeholder="VD: XxxXZelrishXxxX"></div>
+        <div class="form-group"><label>3. UID game</label><input type="text" id="f_uid" placeholder="VD: 1234567890"></div>
+        <div class="form-group"><label>4. Vị trí trong game</label><select id="f_position"><option value="Tanker">Tanker</option><option value="Tiên Phong">Tiên Phong</option><option value="Support">Support</option><option value="Tỉa">Tỉa</option><option value="Ném lựu">Ném lựu</option></select></div>
+        <div class="form-group"><label>5. Chế độ hay chơi</label><select id="f_mode"><option value="Sinh Tồn">Sinh Tồn (Battle Royale)</option><option value="Tử Chiến">Tử Chiến (TDM/CS)</option></select></div>
+        <div class="form-group"><label>6. Súng yêu thích</label><input type="text" id="f_gun" placeholder="VD: M416, AK47, Kar98k..."></div>
+        <button class="save-btn" onclick="saveMyInfo()">💾 LƯU THÔNG TIN (ADD ME)</button>
+        <div id="save-msg" class="saved-msg">✅ Đã lưu! Admin sẽ kiểm tra thông tin của bạn.</div>
+      </div>
+      <div class="rules-block" style="margin-top:10px;">
+        <div class="rule-title">LƯU Ý</div>
+        Sau khi lưu, thông tin sẽ được gửi đến Admin. Vui lòng điền chính xác để được hỗ trợ tốt nhất.
       </div>
     </div>
   </div>
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modal" style="display:none">
-  <div class="modal-box">
-    <p id="modal-msg"></p>
-    <button class="modal-close" onclick="closeModal()">[ ĐÓNG ]</button>
-  </div>
-</div>
+<div class="modal-overlay" id="modal" style="display:none"><div class="modal-box"><p id="modal-msg"></p><button class="modal-close" onclick="closeModal()">[ ĐÓNG ]</button></div></div>
 
-<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, push, onValue, update, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// ===== PASTE FIREBASE CONFIG CỦA MÀY VÀO ĐÂY =====
+// ===== FIREBASE CONFIG (GIỮ NGUYÊN) =====
 const firebaseConfig = {
   apiKey: "AIzaSyDrtNjL4AxoQMvGlOnArIx1iPfqpMgW-qA",
   authDomain: "zelrish-clan.firebaseapp.com",
@@ -240,7 +204,7 @@ const firebaseConfig = {
   messagingSenderId: "69492644163",
   appId: "1:69492644163:web:1c185db6c682255ef937f6"
 };
-// ===================================================
+// =====================================
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -249,12 +213,12 @@ let currentUserId = localStorage.getItem('7z_uid');
 let currentUsername = localStorage.getItem('7z_name');
 let currentStatus = localStorage.getItem('7z_status');
 
-// Check status on load
 if(currentUserId && currentStatus === 'approved'){
   document.getElementById('overlay').style.display='none';
   document.getElementById('app').style.display='flex';
   listenNotifs();
   listenTourneys();
+  loadMyInfo();
 } else if(currentUserId && currentStatus === 'rejected'){
   document.getElementById('rejected-msg').style.display='block';
 } else if(currentUserId && currentStatus === 'pending'){
@@ -262,7 +226,6 @@ if(currentUserId && currentStatus === 'approved'){
   listenForDecision();
 }
 
-// Register
 window.doRegister = function(){
   const val = document.getElementById('reg-input').value.trim();
   if(!val.includes('7z•')){
@@ -278,20 +241,14 @@ window.doRegister = function(){
   currentUserId = uid;
   currentUsername = username;
 
-  set(ref(db, 'requests/'+uid), {
-    username: username,
-    status: 'pending',
-    timestamp: Date.now()
-  });
-
+  set(ref(db, 'requests/'+uid), { username: username, status: 'pending', timestamp: Date.now() });
   showPending();
   listenForDecision();
 }
 
 function showPending(){
   document.getElementById('reg-msg').style.display='block';
-  document.getElementById('reg-msg').innerHTML = 
-    '✅ Đã đăng ký vui lòng chờ Admin duyệt nhé!<br><span class="blink">7z•Zelrish đang phản hồi...</span>';
+  document.getElementById('reg-msg').innerHTML = '✅ Đã đăng ký vui lòng chờ Admin duyệt nhé!<br><span class="blink">7z•Zelrish đang phản hồi...</span>';
   document.querySelector('#reg-box button').disabled=true;
   document.getElementById('reg-input').disabled=true;
 }
@@ -307,6 +264,7 @@ function listenForDecision(){
       document.getElementById('app').style.display='flex';
       listenNotifs();
       listenTourneys();
+      loadMyInfo();
     } else if(data.status==='rejected'){
       localStorage.setItem('7z_status','rejected');
       document.getElementById('reg-msg').style.display='none';
@@ -321,10 +279,7 @@ function listenNotifs(){
     const el = document.getElementById('notif-list');
     if(!data){el.innerHTML='<div class="notif-empty">Chưa có thông báo...</div>';return;}
     const items = Object.values(data).reverse();
-    el.innerHTML = items.map(n=>`
-      <div class="notif-item">📢 ${n.text}
-        <div class="notif-time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div>
-      </div>`).join('');
+    el.innerHTML = items.map(n=>`<div class="notif-item">📢 ${n.text}<div class="notif-time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`).join('');
   });
 }
 
@@ -337,20 +292,7 @@ function listenTourneys(){
     el.innerHTML = entries.map(([tid,t])=>{
       const joined = t.joined || 0;
       const isOngoing = t.status === 'ongoing';
-      return `<div class="tourney-card">
-        <div class="tourney-header">
-          <div class="tourney-name">${t.name}</div>
-          <div class="tourney-time">🕐 ${t.time}</div>
-        </div>
-        <div class="tourney-date">📅 ${t.date}</div>
-        <div class="tourney-meta">
-          <span class="tourney-mode">${t.mode}</span>
-          <span class="tourney-players">👥 ${joined}/${t.maxPlayers}</span>
-        </div>
-        <button class="join-btn ${isOngoing?'ongoing':''}" onclick="joinTourney('${tid}',${joined},${t.maxPlayers})" ${isOngoing?'disabled':''}>
-          ${isOngoing ? '⚔ TRẬN ĐẤU ĐANG ĐƯỢC THỰC HIỆN' : '[ THAM GIA ]'}
-        </button>
-      </div>`;
+      return `<div class="tourney-card"><div class="tourney-header"><div class="tourney-name">${t.name}</div><div class="tourney-time">🕐 ${t.time}</div></div><div class="tourney-date">📅 ${t.date}</div><div class="tourney-meta"><span class="tourney-mode">${t.mode}</span><span class="tourney-players">👥 ${joined}/${t.maxPlayers}</span></div><button class="join-btn ${isOngoing?'ongoing':''}" onclick="joinTourney('${tid}',${joined},${t.maxPlayers})" ${isOngoing?'disabled':''}>${isOngoing ? '⚔ TRẬN ĐẤU ĐANG ĐƯỢC THỰC HIỆN' : '[ THAM GIA ]'}</button></div>`;
     }).join('');
   });
 }
@@ -360,24 +302,43 @@ window.joinTourney = function(tid, joined, max){
   update(ref(db,'tournaments/'+tid), {joined: joined+1});
 }
 
-window.switchTab = function(tab, el){
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('tab-'+tab).classList.add('active');
-  if(el) el.classList.add('active');
-  else {
-    const map = {home:0,tourney:1,rules:2,settings:3};
-    document.querySelectorAll('.nav-item')[map[tab]]?.classList.add('active');
-  }
-}
+// LƯU THÔNG TIN CÁ NHÂN (ADD ME)
+window.saveMyInfo = async function(){
+  const webName = document.getElementById('f_webname').value.trim();
+  const gameName = document.getElementById('f_gamename').value.trim();
+  const uid = document.getElementById('f_uid').value.trim();
+  const position = document.getElementById('f_position').value;
+  const mode = document.getElementById('f_mode').value;
+  const gun = document.getElementById('f_gun').value.trim();
 
-window.showModal = function(msg){
-  document.getElementById('modal-msg').textContent=msg;
-  document.getElementById('modal').style.display='flex';
-}
-window.closeModal = function(){
-  document.getElementById('modal').style.display='none';
-}
-</script>
-</body>
-</html>
+  if(!webName || !gameName || !uid || !gun){
+      showModal("Vui lòng điền đầy đủ thông tin (1,2,3,6)!");
+      return;
+  }
+
+  const profileData = {
+      webName: webName,
+      gameName: gameName,
+      uid: uid,
+      position: position,
+      mode: mode,
+      gun: gun,
+      timestamp: Date.now(),
+      userId: currentUserId
+  };
+
+  // Lưu vào node user_profiles với key là userId
+  await set(ref(db, 'user_profiles/' + currentUserId), profileData);
+  
+  // Ghi log hoạt động cho admin (tính năng "Add Me")
+  await push(ref(db, 'admin_logs'), {
+      action: "ADD ME / KHAI BÁO",
+      detail: `${currentUsername} (${webName}) đã hoàn tất khai báo thông tin.`,
+      timestamp: Date.now(),
+      admin: "System"
+  });
+
+  const msgDiv = document.getElementById('save-msg');
+  msgDiv.style.display = 'block';
+  setTimeout(() => { msgDiv.style.display = 'none'; }, 3000);
+  showModal("Đã lưu thông tin! Cảm ơn bạn đã đồng hành cùng
