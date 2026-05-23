@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7z•Zelrish | Quân Đoàn</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0a0a0f;color:#00ff88;font-family:'Share Tech Mono',monospace;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,0.015) 2px,rgba(0,255,136,0.015) 4px);pointer-events:none;z-index:0;}
+  #overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;z-index:9999;}
+  #reg-box{background:#0d0d1a;border:1px solid #00ff88;border-radius:12px;padding:32px 28px;width:340px;box-shadow:0 0 30px rgba(0,255,136,0.2);}
+  #reg-box h2{font-family:'Orbitron',sans-serif;font-size:14px;letter-spacing:3px;color:#00ff88;text-align:center;margin-bottom:6px;}
+  #reg-box .sub{font-size:11px;color:#00aa55;text-align:center;margin-bottom:24px;}
+  #reg-box input{width:100%;background:#060610;border:1px solid #00ff8855;border-radius:6px;padding:10px 14px;color:#00ff88;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;margin-bottom:14px;}
+  #reg-box input:focus{border-color:#00ff88;}
+  #reg-box button{width:100%;background:#00ff8820;border:1px solid #00ff88;border-radius:6px;padding:11px;color:#00ff88;font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;}
+  #reg-msg{font-size:12px;color:#00ff88;text-align:center;margin-top:14px;line-height:1.6;display:none;}
+  #reg-err{font-size:12px;color:#ff4455;text-align:center;margin-top:10px;display:none;}
+  #rejected-msg{font-size:13px;color:#ff4455;text-align:center;margin-top:14px;display:none;font-family:'Orbitron',sans-serif;}
+  .blink{animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0}}
+  #app{display:none;height:100vh;flex-direction:row;}
+  #sidebar{width:220px;background:#0a0a14;border-right:1px solid #00ff8822;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;}
+  #sidebar-logo{padding:14px 12px;border-bottom:1px solid #00ff8822;}
+  #sidebar-logo img{width:100%;border-radius:10px;display:block;max-height:70px;object-fit:cover;}
+  #sidebar-logo .clan-name{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;color:#00ff88;text-align:center;margin-top:6px;}
+  .nav-item{padding:12px 16px;cursor:pointer;font-size:11px;letter-spacing:1px;color:#00aa55;border-left:3px solid transparent;transition:all .2s;display:flex;align-items:center;gap:8px;}
+  .nav-item:hover{color:#00ff88;background:#00ff8808;border-left-color:#00ff8844;}
+  .nav-item.active{color:#00ff88;background:#00ff8812;border-left-color:#00ff88;}
+  #content{flex:1;overflow-y:auto;padding:20px;background:#0a0a0f;}
+  #content::-webkit-scrollbar{width:4px;}
+  #content::-webkit-scrollbar-thumb{background:#00ff8844;border-radius:2px;}
+  .page-title{font-family:'Orbitron',sans-serif;font-size:14px;letter-spacing:3px;color:#00ff88;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid #00ff8822;text-transform:uppercase;}
+  .card-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+  .dash-card{background:#0d0d1a;border:1px solid #00ff8833;border-radius:10px;padding:16px;cursor:pointer;transition:all .2s;text-align:center;}
+  .dash-card:hover{border-color:#00ff88;background:#00ff8810;transform:translateY(-2px);}
+  .dash-card .card-icon{font-size:20px;margin-bottom:6px;}
+  .dash-card .card-label{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:#00cc66;}
+  .notif-label{font-size:10px;letter-spacing:2px;color:#00aa55;margin-bottom:8px;text-transform:uppercase;}
+  .notif-box{background:#0d0d1a;border:1px solid #00ff8822;border-radius:8px;padding:12px;min-height:50px;}
+  .notif-empty{color:#00ff8844;font-size:12px;font-style:italic;}
+  .notif-item{padding:7px 0;border-bottom:1px solid #00ff8815;font-size:12px;color:#00cc88;}
+  .notif-item:last-child{border-bottom:none;}
+  .notif-time{font-size:10px;color:#00ff8855;margin-top:2px;}
+  .tourney-card{background:#0d0d1a;border:1px solid #00ff8833;border-radius:10px;padding:14px;margin-bottom:12px;}
+  .tourney-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+  .tourney-name{font-family:'Orbitron',sans-serif;font-size:12px;color:#00ff88;}
+  .tourney-time{font-size:11px;color:#00aa55;}
+  .tourney-date{font-size:11px;color:#00aa55;margin-bottom:6px;}
+  .tourney-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .tourney-mode{font-size:10px;color:#00cc66;background:#00ff8815;padding:2px 8px;border-radius:4px;}
+  .tourney-players{font-size:11px;color:#00aa55;}
+  .join-btn{width:100%;background:#0033ff22;border:1px solid #3399ff;border-radius:6px;padding:8px;color:#66aaff;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;cursor:pointer;}
+  .join-btn.ongoing{background:#ff880022;border-color:#ff8800;color:#ff8800;cursor:default;}
+  .rules-block{background:#0d0d1a;border:1px solid #00ff8822;border-radius:8px;padding:16px;line-height:1.9;font-size:12px;color:#00cc77;}
+  .rule-title{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;color:#00ff88;margin-bottom:6px;}
+  .rule-sep{border:none;border-top:1px solid #00ff8822;margin:12px 0;}
+  .locked-msg{background:#0d0d1a;border:1px solid #ff440033;border-radius:8px;padding:24px;text-align:center;color:#ff4455;font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2px;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:999;}
+  .modal-box{background:#0d0d1a;border:1px solid #00ff88;border-radius:10px;padding:24px;max-width:320px;width:90%;text-align:center;}
+  .modal-box p{color:#00ff88;font-size:13px;line-height:1.6;margin-bottom:16px;}
+  .modal-close{background:transparent;border:1px solid #00ff8855;color:#00ff88;padding:8px 20px;border-radius:6px;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:12px;}
+  .info-form{background:#0d0d1a;border:1px solid #00ff8833;border-radius:10px;padding:18px;}
+  .info-form .form-title{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#00ff88;margin-bottom:16px;}
+  .info-group{margin-bottom:14px;}
+  .info-group label{display:block;font-size:10px;letter-spacing:2px;color:#00aa55;margin-bottom:6px;text-transform:uppercase;}
+  .info-group input, .info-group select{width:100%;background:#060610;border:1px solid #00ff8844;border-radius:6px;padding:9px 12px;color:#00ff88;font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;}
+  .info-group input:focus, .info-group select:focus{border-color:#00ff88;}
+  .radio-group{display:flex;flex-wrap:wrap;gap:8px;}
+  .radio-item{background:#060610;border:1px solid #00ff8833;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:11px;color:#00aa55;transition:all .2s;}
+  .radio-item.selected{border-color:#00ff88;color:#00ff88;background:#00ff8815;}
+  .save-btn{width:100%;background:#00ff8820;border:1px solid #00ff88;border-radius:6px;padding:10px;color:#00ff88;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;cursor:pointer;margin-top:6px;}
+  .save-ok{font-size:11px;color:#00ff88;text-align:center;margin-top:8px;display:none;}
+  .member-box{background:#0d0d1a;border:1px solid #00ff8822;border-radius:8px;padding:14px;margin-bottom:14px;max-height:300px;overflow-y:auto;}
+  .member-row{padding:8px 0;border-bottom:1px solid #00ff8815;font-size:12px;color:#00cc88;}
+  .member-row:last-child{border-bottom:none;}
+  .add-me-btn{width:100%;background:#00ff8820;border:1px solid #00ff88;border-radius:6px;padding:10px;color:#00ff88;font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;cursor:pointer;margin-top:14px;}
+  .add-me-btn:disabled{opacity:.4;cursor:default;}
+  .online-dot{width:7px;height:7px;background:#00ff88;border-radius:50%;display:inline-block;margin-right:4px;box-shadow:0 0 6px #00ff88;animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
+</style>
+</head>
+<body>
+<div id="overlay">
+  <div id="reg-box">
+    <h2>Đăng Ký Thành Viên</h2>
+    <div class="sub">7z•Zelrish Quân Đoàn</div>
+    <input type="text" id="reg-input" placeholder="Nhập mã (VD: 7z•TênBạn)">
+    <button onclick="doRegister()">[ ĐĂNG KÝ ]</button>
+    <div id="reg-err">⚠ Vui lòng nhập đúng định dạng 7z•...</div>
+    <div id="reg-msg"></div>
+    <div id="rejected-msg">❌ 7z•Zelrish đã từ chối rồi.</div>
+  </div>
+</div>
+<div id="app">
+  <div id="sidebar">
+    <div id="sidebar-logo">
+      <img src="https://i.ibb.co/Cp488NL3/1777131359417.png" alt="7z•Zelrish" onerror="this.style.display='none'">
+      <div class="clan-name">7z•ZELRISH</div>
+    </div>
+    <div class="nav-item active" onclick="switchTab('home',this)">⌂ Trang Chủ</div>
+    <div class="nav-item" onclick="switchTab('tourney',this)">⚔ Giải Đấu</div>
+    <div class="nav-item" onclick="switchTab('rules',this)">📋 Luật QĐ</div>
+    <div class="nav-item" onclick="switchTab('info',this)">📝 Thông Tin</div>
+    <div class="nav-item" onclick="switchTab('members',this)">👥 Thành Viên</div>
+    <div style="flex:1"></div>
+    <div style="padding:12px 16px;font-size:10px;color:#00ff8844;"><span class="online-dot"></span>ONLINE</div>
+  </div>
+  <div id="content">
+    <!-- HOME -->
+    <div id="tab-home" class="tab-content active">
+      <div class="page-title">⌂ Trang Chủ</div>
+      <div class="card-grid">
+        <div class="dash-card" onclick="switchTab('info',null)"><div class="card-icon">📝</div><div class="card-label">Khai Báo</div></div>
+        <div class="dash-card" onclick="switchTab('tourney',null)"><div class="card-icon">⚔</div><div class="card-label">Giải Đấu</div></div>
+        <div class="dash-card" onclick="switchTab('rules',null)"><div class="card-icon">📋</div><div class="card-label">Luật QĐ</div></div>
+        <div class="dash-card" onclick="switchTab('members',null)"><div class="card-icon">👥</div><div class="card-label">Thành Viên</div></div>
+      </div>
+      <div class="notif-label">▶ Thông Báo</div>
+      <div class="notif-box" id="notif-list"><div class="notif-empty">Chưa có thông báo...</div></div>
+    </div>
+    <!-- INFO FORM -->
+    <div id="tab-info" class="tab-content">
+      <div class="page-title">📝 Thông Tin Cá Nhân</div>
+      <div class="info-form">
+        <div class="form-title">NHẬP THÔNG TIN CỦA BẠN</div>
+        <div class="info-group">
+          <label>1. Tên Nick Trên Web</label>
+          <input type="text" id="inf-nickname" placeholder="Tên hiển thị trên web">
+        </div>
+        <div class="info-group">
+          <label>2. Tên Nick Game</label>
+          <input type="text" id="inf-gamenick" placeholder="Tên trong Free Fire">
+        </div>
+        <div class="info-group">
+          <label>3. UID Game</label>
+          <input type="text" id="inf-uid" placeholder="UID Free Fire của bạn">
+        </div>
+        <div class="info-group">
+          <label>4. Vị Trí Trong Game</label>
+          <div class="radio-group" id="pos-group">
+            <div class="radio-item" onclick="selectRadio('pos','Tanker',this)">Tanker</div>
+            <div class="radio-item" onclick="selectRadio('pos','Tiên Phong',this)">Tiên Phong</div>
+            <div class="radio-item" onclick="selectRadio('pos','Support',this)">Support</div>
+            <div class="radio-item" onclick="selectRadio('pos','Tỉa',this)">Tỉa</div>
+            <div class="radio-item" onclick="selectRadio('pos','Ném lựu',this)">Ném lựu</div>
+          </div>
+        </div>
+        <div class="info-group">
+          <label>5. Chế Độ Hay Chơi</label>
+          <div class="radio-group" id="mode-group">
+            <div class="radio-item" onclick="selectRadio('mode','Sinh Tồn',this)">Sinh Tồn</div>
+            <div class="radio-item" onclick="selectRadio('mode','Tử Chiến',this)">Tử Chiến</div>
+          </div>
+        </div>
+        <div class="info-group">
+          <label>6. Súng Yêu Thích</label>
+          <input type="text" id="inf-gun" placeholder="VD: M1014, AK, M416...">
+        </div>
+        <button class="save-btn" onclick="saveInfo()">[ 💾 LƯU THÔNG TIN ]</button>
+        <div class="save-ok" id="save-ok">✅ Đã lưu thông tin!</div>
+      </div>
+    </div>
+    <!-- TOURNEY -->
+    <div id="tab-tourney" class="tab-content">
+      <div class="page-title">⚔ Giải Đấu</div>
+      <div id="tourney-list"><div class="notif-empty">Chưa có giải đấu nào...</div></div>
+    </div>
+    <!-- RULES -->
+    <div id="tab-rules" class="tab-content">
+      <div class="page-title">📋 Luật Quân Đoàn</div>
+      <div class="rules-block">
+        <div class="rule-title">[ YÊU CẦU GIA NHẬP ]</div>
+        Level : 40<br>Rank BR : Kim Cương 1-5<br>Rank CS : Huyền Thoại (ưu tiên Cao Thủ)<br>1 tuần cày trên 1k5 điểm<br>Không cần đổi tên
+        <hr class="rule-sep">
+        <div class="rule-title">[ VỀ QUÂN ĐOÀN ]</div>
+        Quân đoàn có website<br>Quân đoàn không quan trọng tuổi tác<br>Tab QD : Vui vẻ, Hoà đồng, chuyên phòng, Mic on<br>Cày 5k điểm/1 tuần thì được thăng cấp<br>Cuối tuần cày Quân Đoàn Chiến<br>Không tiện mic thì không sao<br>Vô Quân Đoàn 3 ngày dưới 300 điểm = kick<br>Mic = Ồn bể loa càng tốt<br>Có Box Mess, Tiktok
+        <hr class="rule-sep">
+        <div class="rule-title">[ LUẬT ]</div>
+        Không tục tiểu, không tà dâm<br>Hoà đồng với TV khác trong QD
+      </div>
+    </div>
+    <!-- MEMBERS -->
+    <div id="tab-members" class="tab-content">
+      <div class="page-title">👥 Thành Viên</div>
+      <div class="member-box" id="member-list"><div class="notif-empty">Chưa có thành viên nào...</div></div>
+      <button class="add-me-btn" id="add-me-btn" onclick="addMe()">[ + ADD ME VÀO QUÂN ĐOÀN ]</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal" style="display:none">
+  <div class="modal-box">
+    <p id="modal-msg"></p>
+    <button class="modal-close" onclick="closeModal()">[ ĐÓNG ]</button>
+  </div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, update, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDrtNjL4AxoQMvGlOnArIx1iPfqpMgW-qA",
+  authDomain: "zelrish-clan.firebaseapp.com",
+  databaseURL: "https://zelrish-clan-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "zelrish-clan",
+  storageBucket: "zelrish-clan.firebasestorage.app",
+  messagingSenderId: "69492644163",
+  appId: "1:69492644163:web:1c185db6c682255ef937f6"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+let currentUserId = localStorage.getItem('7z_uid');
+let currentUsername = localStorage.getItem('7z_name');
+let currentStatus = localStorage.getItem('7z_status');
+let selectedPos = '';
+let selectedMode = '';
+
+if(currentUserId && currentStatus==='approved'){
+  document.getElementById('overlay').style.display='none';
+  document.getElementById('app').style.display='flex';
+  initUser();
+} else if(currentUserId && currentStatus==='rejected'){
+  document.getElementById('rejected-msg').style.display='block';
+} else if(currentUserId && currentStatus==='pending'){
+  showPending(); listenForDecision();
+}
+
+window.doRegister = function(){
+  const val = document.getElementById('reg-input').value.trim();
+  if(!val.includes('7z•')){ document.getElementById('reg-err').style.display='block'; return; }
+  document.getElementById('reg-err').style.display='none';
+  const uid = 'user_'+Date.now();
+  localStorage.setItem('7z_uid',uid); localStorage.setItem('7z_name',val); localStorage.setItem('7z_status','pending');
+  currentUserId=uid; currentUsername=val;
+  set(ref(db,'requests/'+uid),{username:val,status:'pending',timestamp:Date.now()});
+  showPending(); listenForDecision();
+}
+function showPending(){
+  document.getElementById('reg-msg').style.display='block';
+  document.getElementById('reg-msg').innerHTML='✅ Đã đăng ký vui lòng chờ Admin duyệt nhé!<br><span class="blink">7z•Zelrish đang phản hồi...</span>';
+  document.querySelector('#reg-box button').disabled=true;
+  document.getElementById('reg-input').disabled=true;
+}
+function listenForDecision(){
+  onValue(ref(db,'requests/'+currentUserId),(snap)=>{
+    const data=snap.val(); if(!data) return;
+    if(data.status==='approved'){
+      localStorage.setItem('7z_status','approved');
+      document.getElementById('overlay').style.display='none';
+      document.getElementById('app').style.display='flex';
+      initUser();
+    } else if(data.status==='rejected'){
+      localStorage.setItem('7z_status','rejected');
+      document.getElementById('reg-msg').style.display='none';
+      document.getElementById('rejected-msg').style.display='block';
+    }
+  });
+}
+function initUser(){
+  listenNotifs(); listenTourneys(); listenMembers(); loadMyInfo();
+}
+function listenNotifs(){
+  onValue(ref(db,'notifications'),(snap)=>{
+    const data=snap.val(); const el=document.getElementById('notif-list');
+    if(!data){el.innerHTML='<div class="notif-empty">Chưa có thông báo...</div>';return;}
+    el.innerHTML=Object.values(data).reverse().map(n=>`<div class="notif-item">📢 ${n.text}<div class="notif-time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`).join('');
+  });
+}
+function listenTourneys(){
+  onValue(ref(db,'tournaments'),(snap)=>{
+    const data=snap.val(); const el=document.getElementById('tourney-list');
+    if(!data){el.innerHTML='<div class="notif-empty">Chưa có giải đấu nào...</div>';return;}
+    el.innerHTML=Object.entries(data).map(([tid,t])=>{
+      const joined=t.joined||0; const isOngoing=t.status==='ongoing';
+      return `<div class="tourney-card">
+        <div class="tourney-header"><div class="tourney-name">${t.name}</div><div class="tourney-time">🕐 ${t.time}</div></div>
+        <div class="tourney-date">📅 ${t.date}</div>
+        <div class="tourney-meta"><span class="tourney-mode">${t.mode}</span><span class="tourney-players">👥 ${joined}/${t.maxPlayers}</span></div>
+        <button class="join-btn ${isOngoing?'ongoing':''}" onclick="joinTourney('${tid}',${joined},${t.maxPlayers})" ${isOngoing?'disabled':''}>
+          ${isOngoing?'⚔ TRẬN ĐẤU ĐANG ĐƯỢC THỰC HIỆN':'[ THAM GIA ]'}
+        </button></div>`;
+    }).join('');
+  });
+}
+function listenMembers(){
+  onValue(ref(db,'members'),(snap)=>{
+    const data=snap.val(); const el=document.getElementById('member-list');
+    if(!data){el.innerHTML='<div class="notif-empty">Chưa có thành viên nào...</div>';return;}
+    let found=false;
+    let html='';
+    Object.entries(data).forEach(([mid,m])=>{
+      html+=`<div class="member-row">👤 ${m.name}</div>`;
+      if(m.uid===currentUserId) found=true;
+    });
+    el.innerHTML=html;
+    const btn=document.getElementById('add-me-btn');
+    if(found){ btn.disabled=true; btn.textContent='✅ ĐÃ VÀO QUÂN ĐOÀN'; }
+    else { btn.disabled=false; btn.textContent='[ + ADD ME VÀO QUÂN ĐOÀN ]'; }
+  });
+}
+window.joinTourney=function(tid,joined,max){
+  if(joined>=max){showModal('Giải đấu đã đủ người!');return;}
+  update(ref(db,'tournaments/'+tid),{joined:joined+1});
+}
+window.addMe=async function(){
+  // Ghi vào joinNotifs để admin thấy
+  await push(ref(db,'joinNotifs'),{msg:`${currentUsername} đã vào quân đoàn`,timestamp:Date.now()});
+  // Ghi vào activity log
+  await push(ref(db,'activity'),{msg:`🎮 ${currentUsername} đã vào quân đoàn`,timestamp:Date.now()});
+  // Thêm vào danh sách members
+  await push(ref(db,'members'),{name:currentUsername,uid:currentUserId,added:Date.now()});
+  showModal('✅ Bạn đã được thêm vào quân đoàn!');
+}
+window.selectRadio=function(type,val,el){
+  const groupId = type==='pos'?'pos-group':'mode-group';
+  document.querySelectorAll('#'+groupId+' .radio-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  if(type==='pos') selectedPos=val; else selectedMode=val;
+}
+window.saveInfo=async function(){
+  const nickname=document.getElementById('inf-nickname').value.trim();
+  const gameNick=document.getElementById('inf-gamenick').value.trim();
+  const uid=document.getElementById('inf-uid').value.trim();
+  const gun=document.getElementById('inf-gun').value.trim();
+  if(!nickname||!gameNick||!uid||!selectedPos||!selectedMode||!gun){showModal('Vui lòng điền đầy đủ thông tin!');return;}
+  await set(ref(db,'memberInfo/'+currentUserId),{
+    nickname,gameNick,uid,position:selectedPos,mode:selectedMode,gun,
+    username:currentUsername,timestamp:Date.now()
+  });
+  await push(ref(db,'activity'),{msg:`📝 ${currentUsername} (${nickname}) đã cập nhật thông tin cá nhân`,timestamp:Date.now()});
+  const s=document.getElementById('save-ok'); s.style.display='block'; setTimeout(()=>s.style.display='none',3000);
+  showModal('✅ Đã lưu thông tin! Admin sẽ kiểm tra.');
+}
+async function loadMyInfo(){
+  const snap=await get(ref(db,'memberInfo/'+currentUserId));
+  if(snap.exists()){
+    const d=snap.val();
+    document.getElementById('inf-nickname').value=d.nickname||'';
+    document.getElementById('inf-gamenick').value=d.gameNick||'';
+    document.getElementById('inf-uid').value=d.uid||'';
+    document.getElementById('inf-gun').value=d.gun||'';
+    if(d.position){
+      selectedPos=d.position;
+      document.querySelectorAll('#pos-group .radio-item').forEach(el=>{if(el.innerText===d.position) el.classList.add('selected');});
+    }
+    if(d.mode){
+      selectedMode=d.mode;
+      document.querySelectorAll('#mode-group .radio-item').forEach(el=>{if(el.innerText===d.mode) el.classList.add('selected');});
+    }
+  }
+}
+window.switchTab=function(tab,el){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(el) el.classList.add('active');
+}
+window.showModal=function(msg){ document.getElementById('modal-msg').textContent=msg; document.getElementById('modal').style.display='flex';}
+window.closeModal=function(){ document.getElementById('modal').style.display='none';}
+</script>
+</body>
+</html>
